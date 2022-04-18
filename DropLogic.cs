@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DropLogic : MonoBehaviour
@@ -18,7 +15,7 @@ public class DropLogic : MonoBehaviour
 
     private float elapsed = 0;
     private const int startPillRow = 0;
-    private const int startPillCol = 4;
+    private const int startPillCol = 3;
     private int pillARow = startPillRow;
     private int pillBRow = startPillRow;
     private int pillACol = startPillCol;
@@ -53,16 +50,12 @@ public class DropLogic : MonoBehaviour
     private float checkSurvivorsCountdown = 0;
     private const float checkSurvivorsLength = .25f;
 
-    // Start is called before the first frame update
     void Start()
     {
         arrangement.InitializeGame();
         state = StateReadyingPill;
         nextPillA = RandomPill(true);
         nextPillB = RandomPill(false);
-        nextPillA.transform.position = new Vector3(nextPillA.transform.position.x + 8, nextPillA.transform.position.y - 5, nextPillA.transform .position.z);
-        nextPillB.transform.position = new Vector3(nextPillB.transform.position.x + 8, nextPillB.transform.position.y - 5, nextPillB.transform.position.z);
-        // to do: transform the next pill somewhere on the side or above the initial location
         NextPill();
     }
 
@@ -93,6 +86,9 @@ public class DropLogic : MonoBehaviour
 
     private GameObject RandomPill(bool isLeft)
     {
+        // The next pill is instantiated off to the side of the playfield so that it is visible to 
+        // the player as the "coming up next" pill.
+
         int col = isLeft ? 0 : 1;
         int roll = Mathf.FloorToInt(UnityEngine.Random.value * 3.0f);
         if (roll == 0)
@@ -109,7 +105,6 @@ public class DropLogic : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (arrangement.NoViruses())
@@ -414,9 +409,6 @@ public class DropLogic : MonoBehaviour
     {
 
         // by the time this function runs, both sides of the pill have been deposited into the arrangement.
-        // starting with (atRowA, atColA), mark horiz then vert matches.
-        // repeat for (atRowB, atColB).
-        // any marked cells get the same treatment: shrink them visually or whatever, and play a particle system.
 
         bool pillAMatched = MarkMatches(atRowA, atColA, colorA);
         bool pillBMatched = MarkMatches(atRowB, atColB, colorB);

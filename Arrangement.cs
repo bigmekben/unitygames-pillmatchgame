@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using UnityEngine;
 
@@ -19,7 +18,6 @@ public class Arrangement : MonoBehaviour
     public int virusCount;
     private bool initialized = false;
 
-
     private void Reset()
     {
         initialized = false;
@@ -37,15 +35,12 @@ public class Arrangement : MonoBehaviour
         }
     }
 
-
-
     public void AddPiece(int atRow, int atCol, GameObject piece)
     {
         if (atRow < 0 || atRow > 15)
             return;
         if (atCol < 0 || atCol > 7)
             return;
-        //piece.gameObject.transform.position = RowColToUnits(atRow, atCol);
         //Debug.Log($"Adding instance of prefab {piece.gameObject.name} at {piece.gameObject.transform.position}");
         gameObjects[atRow, atCol] = piece;
     }
@@ -60,7 +55,6 @@ public class Arrangement : MonoBehaviour
             return ;
         if(gameObjects[atRow,atCol] != null)
         {
-            //gameObjects[atRow, atCol].SetActive(false);
             if (gameObjects[atRow,atCol].tag.ToLower().Contains("virus"))
             {
                 virusCount--;
@@ -80,8 +74,6 @@ public class Arrangement : MonoBehaviour
             return true;
         if (gameObjects[atRow, atCol] == null)
             return false;
-        if (atRow == -1)
-            return false;   // allow pill to be vertical while in top row
         if (gameObjects[atRow, atCol].tag.ToLower().StartsWith("blue") ||
             gameObjects[atRow, atCol].tag.ToLower().StartsWith("red") ||
             gameObjects[atRow, atCol].tag.ToLower().StartsWith("green"))
@@ -133,7 +125,8 @@ public class Arrangement : MonoBehaviour
 
     public Vector3 RowColToUnits(int atRow, int atCol)
     {
-        return new Vector3(atCol, 15 - atRow, 0); // passing -1 for atRow should yield a y of 16.0
+        // passing -1 for atRow should yield a y of 16.0, which is appropriate for vertical pill in the top row
+        return new Vector3(atCol, 15 - atRow, 0); 
     }
 
     internal bool ColorMatches(int atRow, int atCol, string tag)
@@ -145,7 +138,7 @@ public class Arrangement : MonoBehaviour
             return false;
         GameObject piece = gameObjects[atRow, atCol];
         if (piece == null)
-            return false; // shouldn't happen.  There should always be a blankObject at each location.
+            return false;
         if (tag.ToLower().StartsWith("red") && piece.tag.ToLower().StartsWith("red"))
         {
             return true;
